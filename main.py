@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-import os
 import requests
-import subprocess
-import sys
-import xbmc
 import xbmcgui
 import xbmcplugin
 
@@ -15,37 +11,23 @@ from subprocess import call as system_call
 from urlparse import parse_qsl
 from urllib import urlencode
 
-
 def ping(host):
-    fn = open(os.devnull, 'w')
     param = '-n' if system_name().lower()=='windows' else '-c'
     command = ['ping', param, '1', host]
-    retcode = system_call(command, stdout=fn, stderr=subprocess.STDOUT)
-    fn.close()
+    retcode = system_call(command, creationflags=0x00000008)
     return retcode == 0
 
 def get_url(_url, **kwargs):
    return '{0}?{1}'.format(_url, urlencode(kwargs))
 
-# Get the plugin url in plugin:// notation.
 _url = sys.argv[0]
 
-# Get the plugin handle as an integer number.
 _handle = int(sys.argv[1])
 
 if __name__ == '__main__':
 
-    # We use string slicing to trim the leading '?'
-    # from the plugin call paramstring
     paramstring = sys.argv[2][1:]
-
-    # Parse a URL-encoded paramstring to the dictionary of
-    # {<parameter>: <value>} elements
     params = dict(parse_qsl(paramstring))
-    #xbmc.log(str(params),level=xbmc.LOGNOTICE)
-
-    # Check the parameters passed to the plugin give new and restart
-    # quit() is needed at the end of each if
 
     #################################
     #           1st Start           #
@@ -66,29 +48,25 @@ if __name__ == '__main__':
         list_item.setProperty('IsPlayable', 'false')
         xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
 
-        xbmc.log("",level=xbmc.LOGNOTICE)
         for dns_server in parsed_data:
             if dns_server['type'] == "ip":
                 if dns_server['country_name']:
                     if dns_server['asn']:
                         out = dns_server['ip']+" ["+dns_server['country_name']+", "+dns_server['asn']+"]"
-                        list_item = xbmcgui.ListItem(label=out) 
+                        list_item = xbmcgui.ListItem(label=out)
                         list_item.setProperty('IsPlayable', 'false')
                         xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
 
-                        xbmc.log(str(out),level=xbmc.LOGNOTICE)
                     else:
                         out = dns_server['ip']+" ["+dns_server['country_name']+"]"
                         list_item = xbmcgui.ListItem(label=out)
                         list_item.setProperty('IsPlayable', 'false')
                         xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
 
-                        xbmc.log(str(out),level=xbmc.LOGNOTICE)
                 else:
                     list_item = xbmcgui.ListItem(label=str(dns_server['ip']))
                     list_item.setProperty('IsPlayable', 'false')
                     xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
-                    xbmc.log(str(dns_server['ip']),level=xbmc.LOGNOTICE)
         
         servers = 0
 
@@ -135,7 +113,7 @@ if __name__ == '__main__':
                     list_item = xbmcgui.ListItem(label=str(dns_server['ip']))
                     list_item.setProperty('IsPlayable', 'false')
                     xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
-      
+
         xbmcplugin.endOfDirectory(_handle)
         quit()
 
