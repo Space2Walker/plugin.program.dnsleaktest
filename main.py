@@ -1,28 +1,20 @@
 # -*- coding: utf-8 -*-
-# Author: Lord Grey
-# Created : 02.03.2019
-# License: GPL v.3 https://www.gnu.org/copyleft/gpl.html
 
-# https://bash.ws/dnsleak
-
-import os
-import subprocess
 import json
-from random import randint
-from platform import system as system_name
-from subprocess import call as system_call
-from random import randint
-from urlparse import parse_qsl
-from urllib import urlencode
+import os
+import requests
+import subprocess
 import sys
-import xbmcgui
 import xbmc
+import xbmcgui
 import xbmcplugin
 
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
+from platform import system as system_name
+from random import randint
+from subprocess import call as system_call
+from urlparse import parse_qsl
+from urllib import urlencode
+
 
 def ping(host):
     fn = open(os.devnull, 'w')
@@ -66,11 +58,11 @@ if __name__ == '__main__':
         for x in range (0, 10):
             ping('.'.join([str(x),str(leak_id),"bash.ws"]))
         
-        response = urlopen("https://bash.ws/dnsleak/test/"+str(leak_id)+"?json")
-        data = response.read().decode("utf-8")
-        parsed_data = json.loads(data)
+        url = "https://bash.ws/dnsleak/test/" + str(leak_id) + "?json"
+        response = requests.get(url)
+        parsed_data = json.loads(response.content)
         
-        list_item = xbmcgui.ListItem(label='Your IP:') 
+        list_item = xbmcgui.ListItem(label='Your IP:')
         list_item.setProperty('IsPlayable', 'false')
         xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
 
@@ -87,7 +79,7 @@ if __name__ == '__main__':
                         xbmc.log(str(out),level=xbmc.LOGNOTICE)
                     else:
                         out = dns_server['ip']+" ["+dns_server['country_name']+"]"
-                        list_item = xbmcgui.ListItem(label=out) 
+                        list_item = xbmcgui.ListItem(label=out)
                         list_item.setProperty('IsPlayable', 'false')
                         xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
 
@@ -146,7 +138,6 @@ if __name__ == '__main__':
       
         xbmcplugin.endOfDirectory(_handle)
         quit()
-        
 
     #################################
     #             error             #
