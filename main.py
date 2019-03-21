@@ -11,6 +11,10 @@ from subprocess import call as system_call
 from urlparse import parse_qsl
 from urllib import urlencode
 
+_url = sys.argv[0]
+
+_handle = int(sys.argv[1])
+
 def ping(host):
     param = '-n' if system_name().lower()=='windows' else '-c'
     command = ['ping', param, '1', host]
@@ -20,9 +24,10 @@ def ping(host):
 def get_url(_url, **kwargs):
    return '{0}?{1}'.format(_url, urlencode(kwargs))
 
-_url = sys.argv[0]
-
-_handle = int(sys.argv[1])
+def set_label(label):
+    list_item = xbmcgui.ListItem(label=label)
+    list_item.setProperty('IsPlayable', 'false')
+    xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
 
 if __name__ == '__main__':
 
@@ -39,35 +44,25 @@ if __name__ == '__main__':
         leak_id = randint(1000000,9999999)
         for x in range (0, 10):
             ping('.'.join([str(x),str(leak_id),"bash.ws"]))
-        
+
         url = "https://bash.ws/dnsleak/test/" + str(leak_id) + "?json"
         response = requests.get(url)
         parsed_data = json.loads(response.content)
-        
-        list_item = xbmcgui.ListItem(label='Your IP:')
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+
+        set_label('Your IP:')
 
         for dns_server in parsed_data:
             if dns_server['type'] == "ip":
                 if dns_server['country_name']:
                     if dns_server['asn']:
-                        out = dns_server['ip']+" ["+dns_server['country_name']+", "+dns_server['asn']+"]"
-                        list_item = xbmcgui.ListItem(label=out)
-                        list_item.setProperty('IsPlayable', 'false')
-                        xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+                        set_label(dns_server['ip']+" ["+dns_server['country_name']+", "+dns_server['asn']+"]")
 
                     else:
-                        out = dns_server['ip']+" ["+dns_server['country_name']+"]"
-                        list_item = xbmcgui.ListItem(label=out)
-                        list_item.setProperty('IsPlayable', 'false')
-                        xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
-
+                        set_label(dns_server['ip']+" ["+dns_server['country_name']+"]")
+ 
                 else:
-                    list_item = xbmcgui.ListItem(label=str(dns_server['ip']))
-                    list_item.setProperty('IsPlayable', 'false')
-                    xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
-        
+                    set_label(str(dns_server['ip']))
+
         servers = 0
 
         for dns_server in parsed_data:
@@ -75,44 +70,29 @@ if __name__ == '__main__':
                 servers = servers + 1
         
         if servers == 0:
-            list_item = xbmcgui.ListItem(label="No DNS servers found")
-            list_item.setProperty('IsPlayable', 'false')
-            xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+            set_label("No DNS servers found")
 
         else:
-            list_item = xbmcgui.ListItem(label="You use "+str(servers)+" DNS servers:")
-            list_item.setProperty('IsPlayable', 'false')
-            xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+            set_label("You use "+str(servers)+" DNS servers:")
 
             for dns_server in parsed_data:
                 if dns_server['type'] == "dns":
                     if dns_server['country_name']:
                         if dns_server['asn']:
-                            out = dns_server['ip']+" ["+dns_server['country_name']+", "+dns_server['asn']+"]"
-                            list_item = xbmcgui.ListItem(label=out)
-                            list_item.setProperty('IsPlayable', 'false')
-                            xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+                            set_label(dns_server['ip']+" ["+dns_server['country_name']+", "+dns_server['asn']+"]")
+
                         else:
-                            out = dns_server['ip']+" ["+dns_server['country_name']+"]"
-                            list_item = xbmcgui.ListItem(label=out)
-                            list_item.setProperty('IsPlayable', 'false')
-                            xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+                            set_label(dns_server['ip']+" ["+dns_server['country_name']+"]")
+
                     else:
-                        list_item = xbmcgui.ListItem(label=str(dns_server['ip']))
-                        list_item.setProperty('IsPlayable', 'false')
-                        xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+                        set_label(str(dns_server['ip']))
                         
-            
-        list_item = xbmcgui.ListItem(label="Conclusion:")
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+        set_label("Conclusion:")
 
         for dns_server in parsed_data:
             if dns_server['type'] == "conclusion":
                 if dns_server['ip']:
-                    list_item = xbmcgui.ListItem(label=str(dns_server['ip']))
-                    list_item.setProperty('IsPlayable', 'false')
-                    xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
+                    set_label(str(dns_server['ip']))
 
         xbmcplugin.endOfDirectory(_handle)
         quit()
