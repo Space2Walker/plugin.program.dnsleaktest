@@ -29,6 +29,24 @@ def set_label(label):
     list_item.setProperty('IsPlayable', 'false')
     xbmcplugin.addDirectoryItem(_handle, '', list_item, False)
 
+def list_data(parsed_data, d_type):
+    for dns_server in parsed_data:
+        if dns_server['type'] == d_type:
+            if dns_server['country_name']:
+                if dns_server['asn']:
+                    set_label(dns_server['ip']
+                                + " [" + dns_server['country_name']
+                                + ", " + dns_server['asn'] 
+                                + "]")
+
+                else:
+                    set_label(dns_server['ip']
+                                + " [" + dns_server['country_name']
+                                +"]")
+
+            else:
+                set_label(str(dns_server['ip']))
+
 if __name__ == '__main__':
 
     paramstring = sys.argv[2][1:]
@@ -50,18 +68,7 @@ if __name__ == '__main__':
         parsed_data = json.loads(response.content)
 
         set_label('Your IP:')
-
-        for dns_server in parsed_data:
-            if dns_server['type'] == "ip":
-                if dns_server['country_name']:
-                    if dns_server['asn']:
-                        set_label(dns_server['ip']+" ["+dns_server['country_name']+", "+dns_server['asn']+"]")
-
-                    else:
-                        set_label(dns_server['ip']+" ["+dns_server['country_name']+"]")
- 
-                else:
-                    set_label(str(dns_server['ip']))
+        list_data(parsed_data, "ip")
 
         servers = 0
 
@@ -74,19 +81,8 @@ if __name__ == '__main__':
 
         else:
             set_label("You use "+str(servers)+" DNS servers:")
+            list_data(parsed_data, "dns")
 
-            for dns_server in parsed_data:
-                if dns_server['type'] == "dns":
-                    if dns_server['country_name']:
-                        if dns_server['asn']:
-                            set_label(dns_server['ip']+" ["+dns_server['country_name']+", "+dns_server['asn']+"]")
-
-                        else:
-                            set_label(dns_server['ip']+" ["+dns_server['country_name']+"]")
-
-                    else:
-                        set_label(str(dns_server['ip']))
-                        
         set_label("Conclusion:")
 
         for dns_server in parsed_data:
