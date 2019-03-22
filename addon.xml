@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.program.dnsleaktest"
-version="1.1"
+version="1.2"
 name="DNS Leak-Test"
 provider-name="Space2Walker">
 <requires>
-  <import addon="xbmc.python" version="2.26.0"/>
-  <import addon="script.module.requests" version="2.19.1"/>  
+  <import addon="xbmc.python" version="2.19.0"/>
+  <import addon="script.module.requests" version="2.19.1"/>
 </requires>
 <extension point="xbmc.python.pluginsource" library="main.py">
   <provides>executable</provides>
@@ -19,7 +19,7 @@ provider-name="Space2Walker">
     <fanart>fanart.jpg</fanart>
   </assets>
   <news>
-   
+
   </news>
 </extension>
 </addon>
