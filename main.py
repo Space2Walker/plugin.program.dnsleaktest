@@ -23,8 +23,11 @@ _handle = int(sys.argv[1])
 def ping(host):
     param = '-n' if system_name().lower()=='windows' else '-c'
     command = ['ping', param, '1', host]
-    retcode = system_call(command, creationflags=0x00000008)
-    return retcode == 0
+    if system_name().lower()=='windows':
+        retcode = system_call(command, creationflags=0x00000008)
+        return retcode == 0
+    else:
+        retcode = system_call(command)
 
 def get_url(_url, **kwargs):
    return '{0}?{1}'.format(_url, urllib.urlencode(kwargs))
