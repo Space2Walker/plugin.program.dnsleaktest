@@ -8,8 +8,13 @@ import xbmcplugin
 from platform import system as system_name
 from random import randint
 from subprocess import call as system_call
-from urlparse import parse_qsl
-from urllib import urlencode
+
+try:
+    import urllib2 as urllib
+    from urllib2 import urlparse
+except ImportError:
+    import urllib.request as urllib
+    import urllib.parse as urlparse
 
 _url = sys.argv[0]
 
@@ -22,7 +27,7 @@ def ping(host):
     return retcode == 0
 
 def get_url(_url, **kwargs):
-   return '{0}?{1}'.format(_url, urlencode(kwargs))
+   return '{0}?{1}'.format(_url, urllib.urlencode(kwargs))
 
 def set_label(label):
     list_item = xbmcgui.ListItem(label=label)
@@ -36,7 +41,7 @@ def list_data(parsed_data, d_type):
                 if dns_server['asn']:
                     set_label(dns_server['ip']
                                 + " [" + dns_server['country_name']
-                                + ", " + dns_server['asn'] 
+                                + ", " + dns_server['asn']
                                 + "]")
 
                 else:
@@ -50,7 +55,7 @@ def list_data(parsed_data, d_type):
 if __name__ == '__main__':
 
     paramstring = sys.argv[2][1:]
-    params = dict(parse_qsl(paramstring))
+    params = dict(urlparse.parse_qsl(paramstring))
 
     #################################
     #           1st Start           #
@@ -75,7 +80,7 @@ if __name__ == '__main__':
         for dns_server in parsed_data:
             if dns_server['type'] == "dns":
                 servers = servers + 1
-        
+
         if servers == 0:
             set_label("No DNS servers found")
 
