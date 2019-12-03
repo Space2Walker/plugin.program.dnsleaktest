@@ -4,6 +4,7 @@
        name="DNS Leak-Test"
        provider-name="Space2Walker">
 <requires>
+  <import addon="xbmc.python" />
   <import addon="script.module.requests" />
 </requires>
 <extension point="xbmc.python.pluginsource" library="main.py">
