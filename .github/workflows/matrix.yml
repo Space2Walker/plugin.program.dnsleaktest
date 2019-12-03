@@ -16,4 +16,4 @@ jobs:
     - name: Test with Addon checker
       run: |
         pip install kodi-addon-checker
-        kodi-addon-checker
+        kodi-addon-checker --branch matrix

@@ -1,0 +1,19 @@
+name: Kodi-Addon-Check
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Test with Addon checker
+      run: |
+        pip install kodi-addon-checker
+        kodi-addon-checker --branch leia
