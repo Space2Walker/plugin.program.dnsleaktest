@@ -1,6 +1,5 @@
 # plugin.program.dnsleaktest
-![](https://github.com/Space2Walker/plugin.program.dnsleaktest/workflows/LEIA/badge.svg)
-![](https://github.com/Space2Walker/plugin.program.dnsleaktest/workflows/MATRIX/badge.svg)
+![](https://github.com/Space2Walker/plugin.program.dnsleaktest/workflows/Kodi-Addon-Check/badge.svg)
 ## DNS leak Test Addon for KODI
 Compatible to [Kodi](https://kodi.tv/)-17.6 and above.
 
