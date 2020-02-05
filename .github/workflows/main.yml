@@ -18,8 +18,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-        python -m pip install --upgrade pip
-        pip install kodi-addon-checker
+          python -m pip install --upgrade pip
+          pip install kodi-addon-checker
 
       - name: Check LEIA
         run: kodi-addon-checker --branch leia
