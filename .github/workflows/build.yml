@@ -1,11 +1,7 @@
-
 name: Kodi-Addon-Check
 
 on:
   push:
-    branches:
-      - matrix
-  pull_request:
     branches:
       - matrix
 
@@ -37,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger Deploy
-        run: |
-          curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/Space2Walker/kodi-space-repo/dispatches --data '{"event_type": "build_application"}'
+     - name: Send Repository Dispatch
+       uses: peter-evans/repository-dispatch@v1
+       with:
+         token: ${{ secrets.PAT_TOKEN }}
+         repository: Space2Walker/kodi-space-repo
+         event-type: Matrix
