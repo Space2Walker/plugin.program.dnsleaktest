@@ -5,7 +5,7 @@
        provider-name="Space2Walker">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.requests" version="2.19.1"/>
+        <import addon="script.module.requests" version="2.22.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>executable</provides>
@@ -13,28 +13,17 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en">DNS Leak-Test Plugin for Kodi</summary>
         <summary lang="de">DNS Leak-Test Plugin für Kodi</summary>
-        <description lang="en_GB">This addon carries out a DNS leak test on
-            "https://bash.ws/dnsleak"!
-            The base code is from "https://github.com/macvk/dnsleaktest".
-        </description>
-        <description lang="de_DE">Dieses Addon führt einen DNS Leak-Test auf
-            "https://bash.ws/dnsleak" durch!
-            Der Basis Code ist von "https://github.com/macvk/dnsleaktest".
-        </description>
-        <disclaimer lang="en_GB">This addon does not guarantee the correctness
-            of the data.
-        </disclaimer>
-        <disclaimer lang="de_DE">Dieses Addon übernimmt keine Gewährleistung für
-            die richtigkeit der Daten.
-        </disclaimer>
+        <description lang="en_GB">This addon carries out a DNS leak test on "https://bash.ws/dnsleak"! The base code is from "https://github.com/macvk/dnsleaktest".</description>
+        <description lang="de_DE">Dieses Addon führt einen DNS Leak-Test auf "https://bash.ws/dnsleak" durch! Der Basis Code ist von "https://github.com/macvk/dnsleaktest".</description>
+        <disclaimer lang="en_GB">This addon does not guarantee the correctness of the data.</disclaimer>
+        <disclaimer lang="de_DE">Dieses Addon übernimmt keine Gewährleistung für die richtigkeit der Daten.</disclaimer>
         <platform>all</platform>
         <license>GPL-3.0</license>
         <website>https://bash.ws</website>
-        <source>https://github.com/Space2Walker/plugin.program.dnsleaktest
-        </source>
+        <source>https://github.com/Space2Walker/plugin.program.dnsleaktest</source>
         <assets>
             <icon>resources/icon.png</icon>
-            <fanart>resources/fanart.png</fanart>
+            <fanart>resources/fanart.jpg</fanart>
         </assets>
         <news>
             v1.1.2 (16/10/2020)
