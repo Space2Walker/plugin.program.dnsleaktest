@@ -1,7 +1,7 @@
 # plugin.program.dnsleaktest
-![](https://github.com/Space2Walker/plugin.program.dnsleaktest/workflows/Kodi-Addon-Check/badge.svg)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) ![](https://github.com/Space2Walker/plugin.program.dnsleaktest/workflows/Kodi-Addon-Check/badge.svg)
 ## DNS leak Test Addon for KODI
-Compatible to [Kodi](https://kodi.tv/)-17.6 and above.
+Compatible to [Kodi](https://kodi.tv/)-19.0 and above.
 
 This Addon performs a DNS leak test on [bash.ws](https://bash.ws/dnsleak)!
 
