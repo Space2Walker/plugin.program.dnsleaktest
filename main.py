@@ -15,35 +15,34 @@
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json
 import sys
-import requests
-import xbmcgui
 import xbmcaddon
+import xbmcgui
 import xbmcplugin
 import xbmcvfs
-import urllib.parse as urlparse
-from platform import system as system_name
-from random import randint
-from subprocess import call as system_call
-
-
-def ping(host):
-    param = "-n" if system_name().lower() == "windows" else "-c"
-    command = ["ping", param, "1", host]
-    if system_name().lower() == "windows":
-        system_call(command, creationflags=0x00000008)
-    else:
-        system_call(command)
+import resources.utils as utils
 
 
 def set_label(label):
+    """
+    Adds a Kodi directory Item and it's background image
+
+    :param str label: The Title/Label for the Entry
+    :return:
+    """
     list_item = xbmcgui.ListItem(label=label)
     list_item.setArt({"fanart": background})
     xbmcplugin.addDirectoryItem(_handle, "", list_item, False)
 
 
 def list_data(parsed_data, d_type):
+    """
+    parses a sub element off the parsed_data from bash.ws
+    and displays it in kodi
+
+    :param list parsed_data: The Response from bash.ws
+    :param d_type: The Type to list
+    """
     for dns_server in parsed_data:
         if dns_server["type"] == d_type:
             if dns_server["country_name"]:
@@ -59,42 +58,36 @@ def list_data(parsed_data, d_type):
 
 _handle = int(sys.argv[1])
 my_path = xbmcaddon.Addon().getAddonInfo("path")
-background = xbmcvfs.makeLegalFilename(my_path + "/resources/fanart.png")
-paramstring = sys.argv[2][1:]
-params = dict(urlparse.parse_qsl(paramstring))
+background = xbmcvfs.makeLegalFilename(my_path + "/resources/fanart.jpg")
 get_local = xbmcaddon.Addon().getLocalizedString
+identification = utils.perform_ping()
+data = utils.get_response(identification)
 
-if params == {}:
-    xbmcplugin.setContent(_handle, "files")
-    xbmcplugin.setPluginFanart(_handle, background)
-    leak_id = randint(1000000, 9999999)
-    for x in range(0, 10):
-        ping(".".join([str(x), str(leak_id), "bash.ws"]))
+set_label(get_local(62001))
+list_data(data, "ip")
 
-    url = f"https://bash.ws/dnsleak/test/{str(leak_id)}?json"
-    response = requests.get(url)
-    parsed_data = json.loads(response.content)
-    print(parsed_data)
-    set_label(get_local(62001))
-    list_data(parsed_data, "ip")
-    servers = 0
-    for dns_server in parsed_data:
-        if dns_server["type"] == "dns":
-            servers += 1
-    if servers == 0:
-        set_label(get_local(62002))
+servers = 0
+for dns_server in data:
+    if dns_server["type"] == "dns":
+        servers += 1
+
+if servers == 0:
+    set_label(get_local(62002))
+
+else:
+    if servers == 1:
+        set_label(get_local(62003))
     else:
-        if servers == 1:
-            set_label(get_local(62003))
-        else:
-            set_label(get_local(62004))
-        list_data(parsed_data, "dns")
+        set_label(get_local(62004).format(str(servers)))
+    list_data(data, "dns")
 
-    set_label(get_local(62005))
-    for dns_server in parsed_data:
-        if dns_server["type"] == "conclusion":
-            if dns_server["ip"] == "DNS may be leaking.":
-                set_label(get_local(62006))
-            elif dns_server["ip"] == "DNS is not leaking.":
-                set_label(get_local(62007))
-    xbmcplugin.endOfDirectory(_handle, cacheToDisc=False)
+set_label(get_local(62005))
+
+for dns_server in data:
+    if dns_server["type"] == "conclusion":
+        if dns_server["ip"] == "DNS may be leaking.":
+            set_label(get_local(62006))
+        elif dns_server["ip"] == "DNS is not leaking.":
+            set_label(get_local(62007))
+
+xbmcplugin.endOfDirectory(_handle, cacheToDisc=False)
