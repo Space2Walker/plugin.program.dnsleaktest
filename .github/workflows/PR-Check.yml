@@ -6,7 +6,7 @@ jobs:
   matrix-addon-checker:
     if: github.ref == 'refs/heads/matrix'
     runs-on: ubuntu-latest
-    name: Kodi addon checker
+    name: Matrix addon checker
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -25,7 +25,7 @@ jobs:
   leia-addon-checker:
     if: github.ref == 'refs/heads/leia'
     runs-on: ubuntu-latest
-    name: Kodi addon checker
+    name: Leia addon checker
     steps:
       - name: Checkout
         uses: actions/checkout@v2
