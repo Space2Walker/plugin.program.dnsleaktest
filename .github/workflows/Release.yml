@@ -1,9 +1,8 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - v**
+on: [push]
+  tags:
+    - v**
 
 jobs:
   matrix-addon-checker:
@@ -34,6 +33,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Kodi addon checker
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - name: Checkout
         uses: actions/checkout@v2
 
