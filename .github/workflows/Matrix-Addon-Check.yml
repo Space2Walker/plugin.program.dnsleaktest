@@ -5,7 +5,7 @@ on:
     branches:
       - matrix
     tags-ignore:
-      - v*
+      - v**
   pull_request:
     branches:
       - matrix
@@ -15,14 +15,20 @@ jobs:
     name: Kodi addon checker
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
+      with:
+        ref: matrix
+
+    - name: Clean workspace
+      run: |
+        rm -r tools
 
     - name: Kodi addon checker validation
       id: kodi-addon-checker
       uses: xbmc/action-kodi-addon-checker@v1.1
       with:
         kodi-version: matrix
-        addon-id: ${{ github.event.repository.name }}
+
 
   check-black:
     needs: kodi-addon-checker

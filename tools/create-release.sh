@@ -52,3 +52,5 @@ zip -qr "$ZIP_NAME" "$ADDON_ID"
 popd >/dev/null
 
 mv "$WORK_DIR/$ZIP_NAME" ./
+
+echo "::set-output name=name::${ZIP_NAME}"
