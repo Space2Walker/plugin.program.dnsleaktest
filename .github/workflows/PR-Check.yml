@@ -1,0 +1,50 @@
+name: Addon-Check
+
+on: [pull_request]
+
+jobs:
+  matrix-addon-checker:
+    if: github.ref == 'refs/heads/matrix'
+    runs-on: ubuntu-latest
+    name: Kodi addon checker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Clean workspace
+        run: |
+          rm -r tools
+
+      - name: Kodi addon checker validation
+        id: kodi-addon-checker
+        uses: xbmc/action-kodi-addon-checker@v1.0
+        with:
+          kodi-version: matrix
+          is-pr: true
+
+  leia-addon-checker:
+    if: github.ref == 'refs/heads/leia'
+    runs-on: ubuntu-latest
+    name: Kodi addon checker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Clean workspace
+        run: |
+          rm -r tools
+
+      - name: Kodi addon checker validation
+        id: kodi-addon-checker
+        uses: xbmc/action-kodi-addon-checker@v1.0
+        with:
+          kodi-version: leia
+          is-pr: true
+
+  check-black:
+    runs-on: ubuntu-latest
+    name: Check Black Style
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: psf/black@stable
