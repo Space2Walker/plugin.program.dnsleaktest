@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - leia
+    tags:
+      - "v*"
+
+jobs:
+  kodi-addon-checker:
+    runs-on: ubuntu-latest
+    name: Kodi addon checker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Kodi addon checker validation
+        id: kodi-addon-checker
+        uses: xbmc/action-kodi-addon-checker@v1.1
+        with:
+          kodi-version: leia
+          addon-id: ${{ github.event.repository.name }}
+
+  release:
+    needs: kodi-addon-checker
+    name: Create addon release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build addon
+      id: build_addon
+      run: |
+        source .github/scripts/create-release.sh
+        echo "::set-output name=name::${ZIP_NAME}"
+
+    - name: Reading news
+      id: read_news
+      uses: mavrosxristoforos/get-xml-info@1.0
+      with:
+        xml-file: addon.xml
+        xpath: //news
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release Matrix ${{ github.ref }}
+        body: ${{ steps.read_news.outputs.info }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.build_addon.outputs.name }}
+        asset_name: ${{ steps.build_addon.outputs.name }}
+        asset_content_type: application/zip
+
+    - name: Send Dispatch
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.PAT_TOKEN }}
+        repository: Space2Walker/kodi-space-repo
+        event-type: Leia
+
+#    - name: Generate distribution zip and submit to official kodi repository
+#      id: kodi-addon-submitter
+#      uses: xbmc/action-kodi-addon-submitter@v1.1
+#      with: # Replace all the below variables
+#        kodi-repository: repo-plugins
+#        kodi-version: leia
+#        addon-id: plugin.video.example
+#      env: # Make sure you create the below secrets (GH_TOKEN and EMAIL)
+#        GH_USERNAME: ${{ github.actor }}
+#        GH_TOKEN: ${{secrets.GH_TOKEN}}
+#        EMAIL: ${{secrets.EMAIL}}
