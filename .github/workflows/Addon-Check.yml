@@ -3,7 +3,7 @@ name: Addon-Check
 on:
   push:
     tags-ignore:
-      - v**
+      - v*
 
 jobs:
   matrix-addon-checker:
