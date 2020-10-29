@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - matrix
-    tags:
-      - v**
+      tags:
+        - v**
 
 jobs:
   kodi-addon-checker:
@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: matrix
 
       - name: Clean workspace
         run: |
@@ -34,8 +32,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: matrix
 
       - name: Build addon
         id: build_addon
