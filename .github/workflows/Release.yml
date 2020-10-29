@@ -3,13 +3,13 @@ name: Release
 on:
   push:
     tags:
-      - v*
+      - "v*"
 
 jobs:
   matrix-addon-checker:
     if: github.event.base_ref == 'refs/heads/matrix'
     runs-on: ubuntu-latest
-    name: Kodi addon checker
+    name: Matrix addon checker
     steps:
       - name: Dump GitHub context
         env:
@@ -32,7 +32,7 @@ jobs:
   leia-addon-checker:
     if: github.event.base_ref == 'refs/heads/leia'
     runs-on: ubuntu-latest
-    name: Kodi addon checker
+    name: Leia addon checker
     steps:
       - name: Dump GitHub context
         env:
@@ -55,7 +55,7 @@ jobs:
   matrix-release:
     if: github.event.base_ref == 'refs/heads/matrix'
     needs: matrix-addon-checker
-    name: Create addon release
+    name: Create addon release Matrix
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -106,7 +106,7 @@ jobs:
   leia-release:
     if: github.event.base_ref == 'refs/heads/leia'
     needs: leia-addon-checker
-    name: Create addon release
+    name: Create addon release Leia
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
