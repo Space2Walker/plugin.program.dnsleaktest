@@ -7,10 +7,15 @@ on:
 
 jobs:
   matrix-addon-checker:
-    if: github.ref == 'refs/heads/matrix'
+    if: github.event.base_ref == 'refs/heads/matrix'
     runs-on: ubuntu-latest
     name: Kodi addon checker
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -25,7 +30,7 @@ jobs:
           kodi-version: matrix
 
   leia-addon-checker:
-    if: github.ref == 'refs/heads/leia'
+    if: github.event.base_ref == 'refs/heads/leia'
     runs-on: ubuntu-latest
     name: Kodi addon checker
     steps:
@@ -43,7 +48,7 @@ jobs:
           kodi-version: leia
 
   matrix-release:
-    if: github.ref == 'refs/heads/matrix'
+    if: github.event.base_ref == 'refs/heads/matrix'
     needs: matrix-addon-checker
     name: Create addon release
     runs-on: ubuntu-latest
@@ -94,7 +99,7 @@ jobs:
           event-type: Matrix
 
   leia-release:
-    if: github.ref == 'refs/heads/leia'
+    if: github.event.base_ref == 'refs/heads/leia'
     needs: leia-addon-checker
     name: Create addon release
     runs-on: ubuntu-latest
