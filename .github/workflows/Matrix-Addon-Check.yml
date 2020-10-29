@@ -2,10 +2,11 @@ name: Addon-Check
 
 on:
   push:
-    branches:
-      - matrix
     tags-ignore:
       - v**
+    branches:
+      - matrix
+
   pull_request:
     branches:
       - matrix
@@ -25,7 +26,7 @@ jobs:
 
     - name: Kodi addon checker validation
       id: kodi-addon-checker
-      uses: xbmc/action-kodi-addon-checker@v1.1
+      uses: xbmc/action-kodi-addon-checker@v1.0
       with:
         kodi-version: matrix
 
