@@ -49,7 +49,7 @@ jobs:
         id: kodi-addon-checker
         uses: xbmc/action-kodi-addon-checker@v1.0
         with:
-          kodi-version: leia
+          kodi-version: matrix
 
   matrix-release:
     if: github.event.base_ref == 'refs/heads/matrix'
@@ -151,7 +151,7 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repository: Space2Walker/kodi-space-repo
-          event-type: Leia
+          event-type: Matrix
 
 #    - name: Generate distribution zip and submit to official kodi repository
 #      id: kodi-addon-submitter
