@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    branches:
-      - 'matrix'
+    branches-ignore:
+      - 'leia'
     tags:
       - 'v*'
 
@@ -12,11 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Kodi addon checker
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
       - name: Checkout
         uses: actions/checkout@v2
 
