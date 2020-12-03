@@ -5,7 +5,7 @@ on:
     branches:
       - 'leia'
     tags:
-      - v**
+      - 'v*'
 
 jobs:
   leia-addon-checker:

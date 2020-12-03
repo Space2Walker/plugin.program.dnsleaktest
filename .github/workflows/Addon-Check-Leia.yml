@@ -5,7 +5,7 @@ on:
     branches:
       - 'leia'
     tags-ignore:
-      - v**
+      - 'v*'
 jobs:
   leia-addon-checker:
     runs-on: ubuntu-latest

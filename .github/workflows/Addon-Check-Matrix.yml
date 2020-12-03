@@ -5,7 +5,7 @@ on:
     branches:
       - 'matrix'
     tags-ignore:
-      - v**
+      - 'v*'
 jobs:
   matrix-addon-checker:
     runs-on: ubuntu-latest
