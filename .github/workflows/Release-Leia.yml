@@ -1,9 +1,9 @@
-name: Release
+name: Release-Leia
 
 on:
   push:
-    branches:
-      - 'leia'
+    branches-ignore:
+      - 'matrix'
     tags:
       - 'v*'
 
