@@ -1,0 +1,38 @@
+name: Addon-Check-Matrix
+
+on:
+  push:
+    branches:
+      - 'leia'
+    tags-ignore:
+      - v**
+jobs:
+  leia-addon-checker:
+    runs-on: ubuntu-latest
+    name: Kodi addon checker
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Clean workspace
+        run: |
+          rm -r tools
+
+      - name: Kodi addon checker validation
+        id: kodi-addon-checker
+        uses: xbmc/action-kodi-addon-checker@v1.0
+        with:
+          kodi-version: leia
+
+  check-black:
+    runs-on: ubuntu-latest
+    name: Check Black Style
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: psf/black@stable

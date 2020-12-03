@@ -1,13 +1,13 @@
-name: Addon-Check
+name: Addon-Check-Matrix
 
 on:
   push:
+    branches:
+      - 'matrix'
     tags-ignore:
       - v**
-
 jobs:
   matrix-addon-checker:
-    if: github.event.base_ref == 'refs/heads/matrix'
     runs-on: ubuntu-latest
     name: Kodi addon checker
     steps:
@@ -28,29 +28,6 @@ jobs:
         uses: xbmc/action-kodi-addon-checker@v1.0
         with:
           kodi-version: matrix
-
-  leia-addon-checker:
-    if: github.event.base_ref == 'refs/heads/leia'
-    runs-on: ubuntu-latest
-    name: Kodi addon checker
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Clean workspace
-        run: |
-          rm -r tools
-
-      - name: Kodi addon checker validation
-        id: kodi-addon-checker
-        uses: xbmc/action-kodi-addon-checker@v1.0
-        with:
-          kodi-version: leia
 
   check-black:
     runs-on: ubuntu-latest
